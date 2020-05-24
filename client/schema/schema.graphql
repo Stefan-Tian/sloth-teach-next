@@ -1,0 +1,166 @@
+# source: http://localhost:8000/graphql/
+# timestamp: Sun May 24 2020 14:46:05 GMT+0800 (Taipei Standard Time)
+
+input CreateLinkInput {
+  imgUrl: String
+  url: String
+  title: String
+  description: String
+  content: String
+  clientMutationId: String
+}
+
+type CreateLinkPayload {
+  link: LinkNode
+  clientMutationId: String
+}
+
+type CreateUser {
+  user: UserType
+}
+
+"""
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
+
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
+
+input DeleteLinkInput {
+  id: ID
+  clientMutationId: String
+}
+
+type DeleteLinkPayload {
+  link: LinkNode
+  clientMutationId: String
+}
+
+"""
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar
+
+type LinkNode implements Node {
+  """The ID of the object."""
+  id: ID!
+  imgUrl: String!
+  url: String!
+  title: String!
+  description: String!
+  content: String!
+  date: Date!
+  postedBy: UserType
+}
+
+type LinkNodeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [LinkNodeEdge]!
+}
+
+"""A Relay edge containing a `LinkNode` and its cursor."""
+type LinkNodeEdge {
+  """The item at the end of the edge"""
+  node: LinkNode
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Mutation {
+  createLink(input: CreateLinkInput!): CreateLinkPayload
+  deleteLink(input: DeleteLinkInput!): DeleteLinkPayload
+  createUser(email: String!, password: String!, username: String!): CreateUser
+
+  """Obtain JSON Web Token mutation"""
+  tokenAuth(username: String!, password: String!): ObtainJSONWebToken
+  verifyToken(token: String): Verify
+  refreshToken(token: String): Refresh
+}
+
+"""An object with an ID"""
+interface Node {
+  """The ID of the object."""
+  id: ID!
+}
+
+"""Obtain JSON Web Token mutation"""
+type ObtainJSONWebToken {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  token: String!
+}
+
+"""
+The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.
+"""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+type Query {
+  """The ID of the object"""
+  link(id: ID!): LinkNode
+  links(before: String, after: String, first: Int, last: Int, title: String, description: String, postedBy: ID): LinkNodeConnection
+  me: UserType
+  users: [UserType]
+}
+
+type Refresh {
+  payload: GenericScalar!
+  refreshExpiresIn: Int!
+  token: String!
+}
+
+type UserType {
+  id: ID!
+  password: String!
+  lastLogin: DateTime
+
+  """
+  Designates that this user has all permissions without explicitly assigning them.
+  """
+  isSuperuser: Boolean!
+
+  """Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."""
+  username: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+
+  """Designates whether the user can log into this admin site."""
+  isStaff: Boolean!
+
+  """
+  Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
+  """
+  isActive: Boolean!
+  dateJoined: DateTime!
+  linkSet(before: String, after: String, first: Int, last: Int): LinkNodeConnection!
+}
+
+type Verify {
+  payload: GenericScalar!
+}
