@@ -124,13 +124,13 @@ STATIC_URL = '/static/'
 
 GRAPHENE = {
     'SCHEMA': 'server.schema.schema',
-    'MIDDLEWARE': ['graphql_jwt.middleware.JSONWebTokenMiddleware']
+    # 'MIDDLEWARE': ['graphql_jwt.middleware.JSONWebTokenMiddleware']
 }
 
-AUTHENTICATION_BACKENDS = [
-    'graphql_jwt.backends.JSONWebTokenBackend',
-    'django.contrib.auth.backends.ModelBackend',
-]
+# AUTHENTICATION_BACKENDS = [
+#     'graphql_jwt.backends.JSONWebTokenBackend',
+#     'django.contrib.auth.backends.ModelBackend',
+# ]
 
 CORS_ORIGIN_WHITELIST = (
     'http://localhost:3000',  # 本機的不同port

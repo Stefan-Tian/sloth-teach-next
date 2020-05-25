@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate, login
 
 import graphene
 from graphene_django import DjangoObjectType
@@ -30,8 +30,27 @@ class CreateUser(graphene.Mutation):
         return CreateUser(user=user)
 
 
+class LoginUser(graphene.Mutation):
+    user = graphene.Field(UserType)
+
+    class Arguments:
+        username = graphene.String(required=True)
+        password = graphene.String(required=True)
+
+    def mutate(self, info, username, password):
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            raise GraphQLError("Incorrect username or password")
+        else:
+            login(info.context, user)
+
+        return LoginUser(user=user)
+
+
 class Mutation(graphene.ObjectType):
     create_user = CreateUser.Field()
+    login_user = LoginUser.Field()
 
 
 class Query(graphene.ObjectType):
