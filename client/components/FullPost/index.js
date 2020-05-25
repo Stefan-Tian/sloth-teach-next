@@ -14,7 +14,7 @@ export default ({ title, content, postedBy, imgUrl, date }) => {
   return (
     <FullPostContainer>
       <FullPostImageCard src={imgUrl} />
-      <FullPostCard>
+      <FullPostCard type="normal">
         <FullPostCardTitle>{title}</FullPostCardTitle>
         <FullPostCardAuthor>written by {postedBy.username}</FullPostCardAuthor>
         <FullPostCardDate>
