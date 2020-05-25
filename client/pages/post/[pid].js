@@ -1,3 +1,4 @@
+import React from 'react';
 import { fetchQuery, ReactRelayContext } from 'react-relay';
 
 import postPageQuery from '../../queries/postPage';
